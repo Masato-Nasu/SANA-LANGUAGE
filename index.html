@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SANA Language v1.4.0-alpha.4 — 語根から生成される言語</title>
+<title>SANA Language v1.4.0-alpha.9 — 語根から生成される言語</title>
 <meta name="theme-color" content="#E7E5DE">
 <meta name="color-scheme" content="light">
 <meta name="application-name" content="SANA">
@@ -175,13 +175,13 @@
       <span class="word">SANA</span>
     </div>
     <div class="tag">語根ひとつから、語族が規則的に立ち上がる。英語ゼロ・不規則ゼロ・生成的な人工言語。</div>
-    <div id="appStatus" class="safe-status" role="status">SANA Language v1.4.0-alpha.4 — BCCWJ参照語彙の出典・利用条件表記を追加。</div>
+    <div id="appStatus" class="safe-status" role="status">SANA Language v1.4.0-alpha.9 — 応える・擦りむく・手加減・終助詞ぞを追加、大文字UN復号衝突を修正。</div>
     <div class="pwa-panel" aria-label="アプリ操作">
       <button id="installPwa" class="ghost" type="button" hidden>アプリをインストール</button>
       <button id="updatePwa" class="ghost" type="button" hidden>新しい版に更新</button>
       <span id="pwaStatus" class="pwa-state">PWAを確認しています…</span>
     </div>
-    <div class="seal">一 BIT<br>EXIST</div>
+    <div class="seal">The Q-Bit<br>Exists</div>
   </header>
 
   <!-- =================== HERO: FAMILY GENERATOR =================== -->
@@ -307,7 +307,7 @@
     <div class="out">
       <div class="safe-note"><strong>出典</strong><br>国立国語研究所『現代日本語書き言葉均衡コーパス』短単位語彙表 ver.1.0</div>
       <div class="safe-note" style="margin-top:10px"><strong>原語彙表の編集著作権</strong><br>国立国語研究所（National Institute for Japanese Language and Linguistics, NINJAL）</div>
-      <div class="safe-note" style="margin-top:10px">SANA は元の BCCWJ 語彙表、頻度数値、頻度順位、ジャンル別頻度等を再配布しません。SANA 内で表示・利用する語彙上の指標や分類がある場合、それらは開発者が独自に算出・設計したものであり、国立国語研究所による分類・評価・保証を示すものではありません。</div>
+      <div class="safe-note" style="margin-top:10px">SANA は元の BCCWJ 語彙表、頻度数値、頻度順位、ジャンル別頻度等を再配布しません。SANA 内で表示・利用する語彙上の指標や分類がある場合、それらは開発者が独自に算出・設計したものであり、国立国語研究所による分類・評価・保証を示すものではありません。本利用形態については国立国語研究所へ照会し、問題ない旨の回答を得ています（2026年7月）。</div>
       <div class="safe-note" style="margin-top:10px">本アプリは現在、無料・広告なし・非営利の日本語学習支援／言語実験として公開しています。元データには解析誤りが含まれる可能性があり、SANA の語彙情報も完全な正確性を保証するものではありません。</div>
     </div>
   </section>
@@ -54865,6 +54865,65 @@ const SEED_V13_ALPHA2=[
 ];
 SEED_V13_ALPHA2.forEach(a=>addRootGuarded(a[0],a[1],a[2],a[3]||null,a[4]||null));
 
+// v1.4 alpha5: BCCWJ統合ではかな別名が付かなかった定型挨拶のひらがな表記。
+// 「今日は」「今晩は」は漢字表記のみ登録済みのため、ひらがな入力が
+// 「こん＋に＋ち＋は」等へ断片化していた。最後尾バッチとして追加し、既存語根の割当順は変えない。
+const SEED_V14_ALPHA5=[
+  ["こんにちは","こんにちは","adv"],
+  ["こんばんは","こんばんは","adv"],
+  ["おやすみなさい","おやすみなさい","adv"]
+];
+SEED_V14_ALPHA5.forEach(a=>addRootGuarded(a[0],a[1],a[2],a[3]||null,a[4]||null));
+
+// v1.4 alpha6: 分割器の実地入力から得た辞書欠落語。
+// 「ぎゅうぎゅう」はBCCWJ由来擬態語群(どきどき・ふわふわ等)に不在のため、
+// 単漢字ノイズ項目(ぎ・う)＋khx退避へ断片化していた。
+// 「日目」は助数接尾で、不在だと「2日目」が 日(ひ)＋目(め) に割れる。
+const SEED_V14_ALPHA6=[
+  ["ぎゅうぎゅう","ぎゅうぎゅう","adv"],
+  ["日目","にちめ","noun"]
+];
+SEED_V14_ALPHA6.forEach(a=>addRootGuarded(a[0],a[1],a[2],a[3]||null,a[4]||null));
+
+// v1.4 alpha7: 例文入力の精査で判明した辞書欠落。
+// 「ほどく/ほどける」不在により「ほどいて」が ほど＋いて、「ほどけた」が ほど＋桁 に誤分割。
+// 「先ほど」は副詞として登録し、「かえって」と同じ表層優先規則でテ形「ほどいて」との同形衝突を制する。
+// 「円板」(同音の円盤のみ所収)・「一周」「周」「三葉」はjpx退避の原因。
+const SEED_V14_ALPHA7=[
+  ["ほどく","ほどく","verb","","ほど"],
+  ["ほどける","ほどける","verb","","ほどけ"],
+  ["先ほど","さきほど","adv"],
+  ["円板","えんばん","noun"],
+  ["円周","えんしゅう","noun"],
+  ["円周率","えんしゅうりつ","noun"],
+  ["一周","いっしゅう","noun"],
+  ["周","しゅう","noun"],
+  ["三葉","さんよう","noun"]
+];
+SEED_V14_ALPHA7.forEach(a=>addRootGuarded(a[0],a[1],a[2],a[3]||null,a[4]||null));
+
+// v1.4 alpha8: 分野別プローブ(235語)で検出した辞書欠落。数量助数・数学語彙・かな定型。
+const SEED_V14_ALPHA8=[
+  ["番目","ばんめ","noun"],["回目","かいめ","noun"],["枚目","まいめ","noun"],
+  ["冊","さつ","noun"],["匹","ひき","noun"],["七","しち","noun"],["分間","ふんかん","noun"],["締切","しめきり","noun"],
+  ["太もも","ふともも","noun"],["輪っか","わっか","noun"],["捻挫","ねんざ","noun"],["絆創膏","ばんそうこう","noun"],
+  ["対称","たいしょう","noun"],["曲率","きょくりつ","noun"],["素数","そすう","noun"],["無理数","むりすう","noun"],["虚数","きょすう","noun"],
+  ["発散","はっさん","noun"],["数列","すうれつ","noun"],["級数","きゅうすう","noun"],["写像","しゃぞう","noun"],
+  ["符号化","ふごうか","noun"],["語根","ごこん","noun"],["接頭辞","せっとうじ","noun"],["接尾辞","せつびじ","noun"],
+  ["せっかく","せっかく","adv"],["けっこう","けっこう","adv"],["もちろん","もちろん","adv"],
+  ["ずきずき","ずきずき","adv"],["いってらっしゃい","いってらっしゃい","adv"],["ごくろうさま","ごくろうさま","adv"]
+];
+SEED_V14_ALPHA8.forEach(a=>addRootGuarded(a[0],a[1],a[2],a[3]||null,a[4]||null));
+
+// v1.4 alpha9: 実地日誌テキストで判明した欠落。応える不在は「応えよう」を 応＋得よう へ誤同定させていた。
+const SEED_V14_ALPHA9=[
+  ["応える","こたえる","verb","","応え"],
+  ["擦りむく","すりむく","verb","","擦りむ"],
+  ["手加減","てかげん","noun"],
+  ["ぞう","ぞう","noun"],["ぞっと","ぞっと","adv"]
+];
+SEED_V14_ALPHA9.forEach(a=>addRootGuarded(a[0],a[1],a[2],a[3]||null,a[4]||null));
+
 // BCCWJ統合時に名詞として混入した明白な活用断片だけを、語根割当後に除外する。
 // 「なます」のような実在名詞は残す。既存語根の割当順は変えない。
 const MINED_NOUN_ARTIFACTS=new Set(["ます","ました","にじます","おます"]);
@@ -57536,7 +57595,7 @@ const GRAM=[
   ["ください","faku"],["ようでいて","foui"],["ように","foni"],["きたり","faki"],["との","feno"],["みたい","fami"],["けど","fedo"],["でしょ","cori-vato"],
   ["さん","hesa"],["さま","hema"],["様","hemi"],["きた","fita"],["かな","heka"],
   ["へえ","fehe"],
-  ["お",SANA_HYPHEN_CHANNELS.honorificO],["ご",SANA_HYPHEN_CHANNELS.honorificGo],["よ","heyo"],["し","fesi"],["ー","choon"],["ね","hene"],["ん","henu"]
+  ["お",SANA_HYPHEN_CHANNELS.honorificO],["ご",SANA_HYPHEN_CHANNELS.honorificGo],["よ","heyo"],["ぞ","hezo"],["し","fesi"],["ー","choon"],["ね","hene"],["ん","henu"]
 ];
 const PUNC={ "。":".","、":",","！":"!","？":"?","!":SANA_HYPHEN_CHANNELS.asciiLiteral+"-21","?":SANA_HYPHEN_CHANNELS.asciiLiteral+"-3f",".":SANA_HYPHEN_CHANNELS.asciiLiteral+"-2e",",":SANA_HYPHEN_CHANNELS.asciiLiteral+"-2c","・":"middot","　":"fwsp"," ":"sp","\n":"nl",
   "—":"emdash","―":"hbar","…":"ellipsis",
@@ -57880,7 +57939,7 @@ function buildTranslateIndex(){
     // 「こと」は形式名詞として、後続の「の」と結び付く場面でも
     // 内部から「との」を奪われないよう優先する。
     // ひらがな「かえって」は既登録の副詞を既定とし、動詞テ形との同形衝突を避ける。
-    const lexicalPriority=(new Set(["こと","もの","ところ","ため","わけ","はず","よい","試み"]).has(e.ja))?72:(e.pos==="adv"&&e.ja==="かえって"?72:20);
+    const lexicalPriority=(new Set(["こと","もの","ところ","ため","わけ","はず","よい","試み"]).has(e.ja))?72:(e.pos==="adv"&&(e.ja==="かえって"||e.ja==="先ほど")?72:20);
     addM(e.ja,()=>({j:e.ja,s:e.pos==="adj"?adjToken(e,"base"):nounToken(e),t:e.pos==="adj"?"a":"w"}),lexicalPriority);
   }
   for(const k of Object.keys(DEMO)) addM(k,()=>({j:k,s:DEMO[k],t:"w"}),48);
@@ -58084,6 +58143,7 @@ const NA_ADJ_SURFACES=new Set(DICT.filter(e=>e.pos==="adj"&&!e.vstem).map(e=>e.j
 // 完全被覆できる場合に限り分割する。完全被覆できなければ列全体を jpx- で可逆保持する。
 const KANJI_SINGLE_WORDS=new Set([
   ..."一二三四五六七八九十百千万億兆",
+  ..."枚回数個何頃非逆僕", // v1.4 alpha8: 辞書所収なのに白リスト外で被覆不能だった高頻度単字
   ..."人子女男日月年時分秒半円本字文句話絵図線点面力心手足目耳口頭顔体身家国市町村道駅山川海空花草木火水土金石雨雪風音声色型形方物者事所中外前後上下左右東西南北内元今昔朝昼夜春夏秋冬生死神寺島森林谷城県校社店館室場部課組種油画"
 ]);
 const KANJI_BOUNDARY_AFTER=[
@@ -58255,7 +58315,18 @@ function translate(text){
       let i=0;
       while(i<L){
         const c=choice[i];
-        if(c.kind==="known"){flush();chunks.push(c.m.make());i+=c.len;}
+        if(c.kind==="known"){
+          // v1.4 alpha8: 未知文字に隣接する1文字かな語彙(名詞・副詞)は、
+          // 未知列の途中を既知語と主張せず、未知列ごと可逆リテラルへ送る。
+          // 助詞・文法・動詞トークンは対象外。「ぎゅうぎゅう」型の単字サラダの構造的防止。
+          const ch=c.m.make();
+          const leftUnknown=unk!=="";
+          const rightUnknown=(i+c.len<L)&&choice[i+c.len]&&choice[i+c.len].kind==="unknown";
+          if(c.len===1&&ch.t==="w"&&/^[\u3040-\u309f\u30a0-\u30ff]$/.test(part[i])&&(leftUnknown||rightUnknown)){
+            unk+=part[i];i++;continue;
+          }
+          flush();chunks.push(ch);i+=c.len;
+        }
         else {unk+=part[i];i++;}
       }
     }
@@ -58357,7 +58428,7 @@ function setStatus(msg,isError=false){
   const el=$("#appStatus"); if(!el)return;
   el.textContent=msg; el.classList.toggle("error",!!isError);
 }
-const SANA_BUILD_VERSION="1.4.0-alpha.4";
+const SANA_BUILD_VERSION="1.4.0-alpha.9";
 let LAST_SANA_TEXT="", LAST_REVERSE_TEXT="", LAST_IMAGE_SANA="", LAST_IMAGE_JAPANESE="";
 function visibleOutputText(selector, emptyTexts=[]){
   const el=$(selector);
@@ -58793,7 +58864,7 @@ function getOcrTokenLexicon(){
   const legacySuffixes=["","ta","nai","teiru","teita","teite","tete","teru","kateru","katekudasai","tara","tari","ro","de","i","tai","takatta","takunai","takunakatta","tekudasai","tehoshii","masu","mashita","masen","teimasu","teimashita","teiku","rareru","rareta","rarenai","rarede","rarei","rareteiru","rareteite","raremasu","rareteiku"];
   const legacyCandidates=["un","ga","mu","no","la","le","na","te","mo","wa","ya","adna","ka","kara","made","yori","shika","sae",
     "cora","cora-veta","cora-veta-vaka","cora-voro","core","core-veni","core-veka","core-vami","core-veta","core-veta-vaka","core-vasa-veta","core-vasa-veta-vaka","cori","cori-veta","cori-veta-vaka","cori-voro","cori-vato",
-    "hesa","hema","hemi","hono","hongo","heyo","hene","henu","fesi","fera-vasa","fera-vasa-veta","fera-vasa-un","fera-vasa-veta-un","fera-vasa-veni","fera-vasa-ka",
+    "hesa","hema","hemi","hono","hongo","heyo","hezo","hene","henu","fesi","fera-vasa","fera-vasa-veta","fera-vasa-un","fera-vasa-veta-un","fera-vasa-veni","fera-vasa-ka",
     "famu","famu-vasa","famu-veta","fona","faro","fane","fene","faka","fimo","fari","fote","fiu","faku","foni","faki","feno","fami","fedo","fita","fako","fagara","fomonaru","fehe",
     "des","dearu","da","datta","dattara","deshita","deshitara","deatta","deattara","dearimashita","dearimashitara","n","ne","yo","shi","san","sama","honomero","darou","nandarou","nandesu","deshou","desho","rashiku","toshite","kedo","kitari","kitakana","kudasai","youni","mitai","kamoshirenai","kamoshiremasen","kamoshirenakatta","hontouni",
     "emdash","hbar","ellipsis","jqopen","jqclose","jdqopen","jdqclose","dqopen","dqclose","sqopen","sqclose","jparenopen","jparenclose","parenopen","parenclose","kono","sono","ano","kore","sore","are","nl","sp","fwsp"];
@@ -58908,8 +58979,11 @@ const segDrop=$("#segDropZone");
 segDrop.addEventListener("drop",e=>{const f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];if(f)setSegFile(f);});
 
 /* ================= REVERSE : SANA → 日本語 ================= */
-const ICHIDAN=new Set(["食べる","見る","見せる","起きる","寝る","覚える","感じる","生きる","いる","考える","開ける","閉める","出る","始める","終える","変える","決める","教える","続ける","忘れる","信じる","見つける","入れる","捨てる","答える","降りる","落ちる","閉じる","投げる","借りる","褒める","調べる","建てる","育てる","植える","見える","聞こえる","生まれる","疲れる","吠える","流れる","燃える","消える","冷える","濡れる","溶ける","伸びる","増える","枯れる","揺れる","咲かせる","溢れる","見える","押し下げる","見る","押せる","感じる","言える","着ける","生まれる","入れる","使える","考える","混ぜる","分ける","流る","増える","流れる","現れる","連れる","壊れる","閉じ込める","組み合わせる","通せる","設ける","掛ける","切り替える","加える","応じる","収める","与える","含める","見せる","伸びる","変える","重ねる","帯びる","強める","読み替える","広げる","迎える","支える","和らげる","扱える","求める","取り入れる","触れる","浮かせる","浸ける","上げる","保てる","出る","見据える","蓄える","抜ける","整える","途切れる","踏まえる","置き換える","捉える","開ける","用いる","答える","閉じる","寄せる","切り詰める","向ける","食べる","付ける","合わせる","出来る","似る","表せる","得る","隣り合わせる","起きる","続ける","落ちる","演じる","思える","呆れる","思い出せる","書き換える","働きかける","薄れる","位置づける","始める","間違える","消える","訪れる","折れる","語りかける","溶ける","忘れる","止める","破れる","結びつける","足りる","控える","超える","並べる","述べる","任せる","名づける","見届ける","聞ける","交ぜる","集める","持てる","取れる","思い浮かべる","外せる","手がける","経る","束ねる","受ける","作れる","終える","込める","代える","叶える","読める","選べる","載せる","残せる","進める","覚える","戻せる","割り当てる","見慣れる","組み立る","褒める","直せる","伝える","書き出せる","立てる","眺める","避ける","出せる","耐える","受け止める","魅せる","締める","漏れる","送れる","楽しめる","決める","育てる","見分ける","揺れる","傾ける","聞こえる","片付ける","試せる","下げる","近づける","備える","振れる","弱める","抑える","持ち上げる","忘れかける","読み上げる","隠れる","当てる","見つける","回せる","組み立てる","対応付ける","揃える","留める","生じる","行える"]);
+const ICHIDAN=new Set(["ほどける","食べる","見る","見せる","起きる","寝る","覚える","感じる","生きる","いる","考える","開ける","閉める","出る","始める","終える","変える","決める","教える","続ける","忘れる","信じる","見つける","入れる","捨てる","答える","降りる","落ちる","閉じる","投げる","借りる","褒める","調べる","建てる","育てる","植える","見える","聞こえる","生まれる","疲れる","吠える","流れる","燃える","消える","冷える","濡れる","溶ける","伸びる","増える","枯れる","揺れる","咲かせる","溢れる","見える","押し下げる","見る","押せる","感じる","言える","着ける","生まれる","入れる","使える","考える","混ぜる","分ける","流る","増える","流れる","現れる","連れる","壊れる","閉じ込める","組み合わせる","通せる","設ける","掛ける","切り替える","加える","応じる","収める","与える","含める","見せる","伸びる","変える","重ねる","帯びる","強める","読み替える","広げる","迎える","支える","和らげる","扱える","求める","取り入れる","触れる","浮かせる","浸ける","上げる","保てる","出る","見据える","蓄える","抜ける","整える","途切れる","踏まえる","置き換える","捉える","開ける","用いる","答える","閉じる","寄せる","切り詰める","向ける","食べる","付ける","合わせる","出来る","似る","表せる","得る","隣り合わせる","起きる","続ける","落ちる","演じる","思える","呆れる","思い出せる","書き換える","働きかける","薄れる","位置づける","始める","間違える","消える","訪れる","折れる","語りかける","溶ける","忘れる","止める","破れる","結びつける","足りる","控える","超える","並べる","述べる","任せる","名づける","見届ける","聞ける","交ぜる","集める","持てる","取れる","思い浮かべる","外せる","手がける","経る","束ねる","受ける","作れる","終える","込める","代える","叶える","読める","選べる","載せる","残せる","進める","覚える","戻せる","割り当てる","見慣れる","組み立る","褒める","直せる","伝える","書き出せる","立てる","眺める","避ける","出せる","耐える","受け止める","魅せる","締める","漏れる","送れる","楽しめる","決める","育てる","見分ける","揺れる","傾ける","聞こえる","片付ける","試せる","下げる","近づける","備える","振れる","弱める","抑える","持ち上げる","忘れかける","読み上げる","隠れる","当てる","見つける","回せる","組み立てる","対応付ける","揃える","留める","生じる","行える"]);
 ["できる","重ね合わせる","空じ続ける","見つめる","出かける"].forEach(v=>ICHIDAN.add(v));
+// v1.4 alpha8: 全動詞監査(stem+た往復プローブ)で判明した一段クラス未登録。
+// 〜返る・〜帰る・〜切る・〜交じる等の五段は除外済み。集合への追加は語根割当に影響しない。
+["過ぎる","駆ける","みちる","伏せる","ふせる","表わせる","言い表わせる","熟せる","蹌踉ける","ぶっちゃける","嗾ける","諫める","辱しめる","擬える","荒げる","あらげる","える","つめる","につめる","のめる","あるける","きせる","しめる","ねる","にえる","にせる","たける","かえる","おだてる","ふける","もちえる","応える"].forEach(v=>ICHIDAN.add(v));
 ICHIDAN_BCCWJ_GENERAL.forEach(v=>ICHIDAN.add(v));
 function reconVerb(E,form){
   // 不規則動詞「来る」は、活用系列全体を閉じた表で復元する。
@@ -59043,7 +59117,7 @@ function reverseTranslate(text){
     core:"である","core-veni":"であって","core-veka":"であれば","core-vami":"であり","core-veta":"であった","core-veta-vaka":"であったら","core-vasa-veta":"でありました","core-vasa-veta-vaka":"でありましたら",
     cori:"です","cori-veta":"でした","cori-veta-vaka":"でしたら","cori-voro":"でしょう","cori-vato":"でしょ"};
   const CMAP={des:"です",dearu:"である",da:"だ",datta:"だった",dattara:"だったら",deshita:"でした",deshitara:"でしたら",deatta:"であった",deattara:"であったら",dearimashita:"でありました",dearimashitara:"でありましたら"};
-  const GMAP12={hesa:"さん",hema:"さま",hemi:"様",hono:"お",hongo:"ご",heyo:"よ",hene:"ね",henu:"ん",fesi:"し",
+  const GMAP12={hesa:"さん",hema:"さま",hemi:"様",hono:"お",hongo:"ご",heyo:"よ",hezo:"ぞ",hene:"ね",henu:"ん",fesi:"し",
     "fera-vasa":"ございます","fera-vasa-veta":"ございました","fera-vasa-un":"ございません","fera-vasa-veta-un":"ございませんでした","fera-vasa-veni":"ございまして","fera-vasa-ka":"ございますか",
     famu:"かもしれない","famu-vasa":"かもしれません","famu-veta":"かもしれなかった",fona:"ほんとうに",faro:"なんだろう",fane:"なんです",fene:"ですね",faka:"なかったら",
     faja:"じゃない",heka:"かな",femasen:"ではありません",femashita:"ではありませんでした",
@@ -59137,7 +59211,7 @@ function reverseTranslate(text){
     const t=raw.toLowerCase();
     const titleCaseSana=/^[A-Z][a-z0-9]*(?:-[a-z0-9]+)*$/.test(raw) && raw.length>=4 && isKnownSanaLowerToken(t);
     let ja=null, role="n", meta=null;
-    if(t==="un"){ pendingUn=true; continue; }
+    if(raw==="un"){ pendingUn=true; continue; } // v1.4 alpha9: 大文字ASCII "UN" パススルーを飲み込まないよう原文一致で判定
     if(!t){}
     else if(/^lit-(?:[0-9a-f]{2})+$/i.test(raw)){ ja=asciiLiteralDecode(raw); role="w"; }
     else if(/[A-Z]/.test(raw) && !titleCaseSana){ ja=raw; role="w"; }

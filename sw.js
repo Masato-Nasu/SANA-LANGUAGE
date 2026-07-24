@@ -1,4 +1,4 @@
-const CACHE_NAME = "sana-language-v1.4.0-alpha.4";
+const CACHE_NAME = "sana-language-v1.4.0-alpha.9";
 const APP_SHELL = [
   "./",
   "./index.html",
