@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SANA Language v1.4.0-alpha.10 — 語根から生成される言語</title>
@@ -59459,7 +59462,7 @@ try{
     if (reloadForUpdate) location.reload();
   });
 
-  navigator.serviceWorker.register("./sw.js", { scope: "./" }).then(reg => {
+  navigator.serviceWorker.register("./sw.js?v=1.4.0-alpha.10", { scope: "./", updateViaCache: "none" }).then(reg => {
     registration = reg;
     if (reg.waiting) showUpdate(reg.waiting);
 

@@ -89,3 +89,9 @@ SANA does not redistribute the original frequency list, raw frequency values, ra
 ## Author
 
 **Masato Nasu / 那須 雅人**
+
+### alpha.10 cache hotfix
+- `index.html` / `sw.js` の旧版キャッシュ残留を防止
+- Service Worker を `updateViaCache: "none"` で登録
+- 新しい Service Worker はインストール後すぐ `skipWaiting()`
+- Cloudflare Pages 用 `_headers` で `index.html` と `sw.js` を no-cache/no-store
