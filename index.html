@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SANA Language v1.4.0-alpha.9 — 語根から生成される言語</title>
+<title>SANA Language v1.4.0-alpha.10 — 語根から生成される言語</title>
 <meta name="theme-color" content="#E7E5DE">
 <meta name="color-scheme" content="light">
 <meta name="application-name" content="SANA">
@@ -35,7 +35,7 @@
   .mark{display:flex; align-items:center; gap:14px}
   .mark svg{display:block}
   .word{font-family:var(--mono); font-size:30px; letter-spacing:.42em; font-weight:600; padding-left:.42em}
-  .tag{margin-top:10px; color:var(--sub); font-size:13.5px; letter-spacing:.02em; padding-right:52px} /* v1.4 alpha9: 縦書き落款の列幅を確保し、長い作品名でも本文と重ならない */
+  .tag{margin-top:10px; color:var(--sub); font-size:13.5px; letter-spacing:.02em; padding-right:52px} /* v1.4 alpha10: 縦書き落款の列幅を確保し、長い作品名でも本文と重ならない */
   .seal{position:absolute; top:30px; right:0; font-family:var(--mono); font-size:10.5px;
     color:var(--seal); border:1.2px solid var(--seal); border-radius:3px; padding:4px 6px; letter-spacing:.12em;
     writing-mode:vertical-rl; line-height:1.05}
@@ -175,7 +175,7 @@
       <span class="word">SANA</span>
     </div>
     <div class="tag">語根ひとつから、語族が規則的に立ち上がる。英語ゼロ・不規則ゼロ・生成的な人工言語。</div>
-    <div id="appStatus" class="safe-status" role="status">SANA Language v1.4.0-alpha.9 — 応える・擦りむく・手加減・終助詞ぞを追加、大文字UN復号衝突を修正。</div>
+    <div id="appStatus" class="safe-status" role="status">SANA Language v1.4.0-alpha.10 — 否定標識を un から nu へ変更。旧 un は復号互換のみ維持。</div>
     <div class="pwa-panel" aria-label="アプリ操作">
       <button id="installPwa" class="ghost" type="button" hidden>アプリをインストール</button>
       <button id="updatePwa" class="ghost" type="button" hidden>新しい版に更新</button>
@@ -214,7 +214,7 @@
   <section>
     <div class="eyebrow">02 — 日本語 → SANA</div>
     <h2>語根合成で翻訳する</h2>
-    <p class="note">登録語根に最長一致して合成。否定は独立標識 un、未登録の漢字・混合表記は jpx- で可逆保持。未登録の仮名語も公開規則だけで往復します。</p>
+    <p class="note">登録語根に最長一致して合成。否定は独立標識 nu、未登録の漢字・混合表記は jpx- で可逆保持。未登録の仮名語も公開規則だけで往復します。</p>
     <label class="k">日本語</label>
     <textarea id="trIn" spellcheck="false" placeholder="日本語を入力"></textarea>
     <div class="actionbar">
@@ -373,7 +373,7 @@ function morphToken(base,seq){ return base+(seq&&seq.length?"-"+seq.join("-"):""
 function deriveWord(root,deriv,pos){let s=root; if(deriv)s+=DERIV[deriv]; s+=POS[pos||"noun"]; return s;}
 function conj(root,t){
   const base=root+POS.verb;
-  if(t==="neg") return "un "+base;
+  if(t==="neg") return "nu "+base;
   const seq={past:[MORPH12.past],prog:[MORPH12.progressive],pastprog:[MORPH12.progressive,MORPH12.past],vol:[MORPH12.volitional]}[t]||[];
   return morphToken(base,seq);
 }
@@ -839,7 +839,7 @@ const SEED=[
 // エンコーダ側と共有する単一の定義表へ集約する。
 // 新しいハイフン前置チャネルはこの表へ追加し、生成側と読取側の双方へ伝播させる。
 const SANA_HYPHEN_CHANNELS=Object.freeze({
-  negation:"un",
+  negation:"nu",
   asciiLiteral:"lit",
   mixedLiteral:"jpx",
   hiraganaLiteral:"khx",
@@ -54915,7 +54915,7 @@ const SEED_V14_ALPHA8=[
 ];
 SEED_V14_ALPHA8.forEach(a=>addRootGuarded(a[0],a[1],a[2],a[3]||null,a[4]||null));
 
-// v1.4 alpha9: 実地日誌テキストで判明した欠落。応える不在は「応えよう」を 応＋得よう へ誤同定させていた。
+// v1.4 alpha10: 実地日誌テキストで判明した欠落。応える不在は「応えよう」を 応＋得よう へ誤同定させていた。
 const SEED_V14_ALPHA9=[
   ["応える","こたえる","verb","","応え"],
   ["擦りむく","すりむく","verb","","擦りむ"],
@@ -57551,15 +57551,15 @@ const COP=[
 ];
 const SURU=[
   ["していました","se-vira-vasa-veta"],["しています","se-vira-vasa"],["している","se-vira"],
-  ["していた","se-vira-veta"],["してる","se-vira-vato"],["しなかった","un se-veta"],["しました","se-vasa-veta"],
-  ["しません","un se-vasa"],["します","se-vasa"],["しない","un se"],["した","se-veta"],["して","se-veni"],["し","se-vami"],["する","se"]
+  ["していた","se-vira-veta"],["してる","se-vira-vato"],["しなかった","nu se-veta"],["しました","se-vasa-veta"],
+  ["しません","nu se-vasa"],["します","se-vasa"],["しない","nu se"],["した","se-veta"],["して","se-veni"],["し","se-vami"],["する","se"]
 ];
 // 文法化した定型表現。すべて公開された固定表でSANA固有トークンへ写す。
 const GRAM=[
   // 否定・判断・終助詞。辞書の短い仮名語より先に、定型の文法境界を取る。
-  ["のではないでしょうか","no un core cori-voro ka"],["んじゃないでしょうか","henu faja cori-voro ka"],["じゃないでしょうか","faja cori-voro ka"],["ではないでしょうか","un core cori-voro ka"],
-  ["のではないですか","no un core cori ka"],["んじゃないですか","henu faja cori ka"],["じゃないですか","faja cori ka"],["ではないですか","un core cori ka"],
-  ["のではないか","no un core ka"],["んじゃないかな","henu faja heka"],["じゃないかな","faja heka"],["じゃないかも","faja ka mo"],
+  ["のではないでしょうか","no nu core cori-voro ka"],["んじゃないでしょうか","henu faja cori-voro ka"],["じゃないでしょうか","faja cori-voro ka"],["ではないでしょうか","nu core cori-voro ka"],
+  ["のではないですか","no nu core cori ka"],["んじゃないですか","henu faja cori ka"],["じゃないですか","faja cori ka"],["ではないですか","nu core cori ka"],
+  ["のではないか","no nu core ka"],["んじゃないかな","henu faja heka"],["じゃないかな","faja heka"],["じゃないかも","faja ka mo"],
   ["じゃないんです","faja henu cori"],["じゃないよね","faja heyo hene"],["じゃないよ","faja heyo"],["じゃないか","faja ka"],
   ["んじゃない","henu faja"],["じゃない","faja"],["のかな","no heka"],
   ["ではありませんでした","femashita"],["ではありません","femasen"],
@@ -57587,10 +57587,10 @@ const GRAM=[
   ["わけです","fawari"],["わけだ","fawada"],["うえで","faude"],["うえに","fauni"],["べき","febi"],
   // 敬語・定型依頼。規則活用しない表現だけを閉じた表として扱う。
   ["お気をつけください","feoki"],["ご覧ください","fegora"],["お越しください","feokoshi"],["お待ちください","feomachi"],["よろしくお願いします","feyoro"],
-  ["ございませんでした","fera-vasa-veta-un"],["ございました","fera-vasa-veta"],["ございません","fera-vasa-un"],["ございますか","fera-vasa-ka"],["ございまして","fera-vasa-veni"],["ございます","fera-vasa"],
+  ["ございませんでした","fera-vasa-veta-nu"],["ございました","fera-vasa-veta"],["ございません","fera-vasa-nu"],["ございますか","fera-vasa-ka"],["ございまして","fera-vasa-veni"],["ございます","fera-vasa"],
   ["かもしれなかった","famu-veta"],["かもしれません","famu-vasa"],["かもしれない","famu"],
-  ["ではないし","un core fesi"],["ほんとうに","fona"],["なんだろう","faro"],["なんです","fane"],["ですね","fene"],
-  ["なかったら","faka"],["ではない","un core"],["でしょう","cori-voro"],["だろう","cora-voro"],
+  ["ではないし","nu core fesi"],["ほんとうに","fona"],["なんだろう","faro"],["なんです","fane"],["ですね","fene"],
+  ["なかったら","faka"],["ではない","nu core"],["でしょう","cori-voro"],["だろう","cora-voro"],
   ["にしても","fimo"],["らしく","fari"],["しても","se-veni mo"],["として","fote"],["ですか","cori ka"],["だって","fada"],["って","fati"],["という","fiu"],
   ["ください","faku"],["ようでいて","foui"],["ように","foni"],["きたり","faki"],["との","feno"],["みたい","fami"],["けど","fedo"],["でしょ","cori-vato"],
   ["さん","hesa"],["さま","hema"],["様","hemi"],["きた","fita"],["かな","heka"],
@@ -57668,8 +57668,8 @@ const VFORM12={
   causativePastProg:[MORPH12.causative,MORPH12.progressive,MORPH12.past], causativeTeIku:[MORPH12.causative,MORPH12.connective,MORPH12.onward],
   easy:[MORPH12.easy], easyPast:[MORPH12.easy,MORPH12.past], easyTe:[MORPH12.easy,MORPH12.connective], easyCont:[MORPH12.easy,MORPH12.continuative]
 };
-// 否定は語尾ではなく独立標識 un。右側には対応する肯定形を置く。
-// 接続・進行・依頼・仮定も、un + 対応する文法系列として合成する。
+// 否定は語尾ではなく独立標識 nu。右側には対応する肯定形を置く。
+// 接続・進行・依頼・仮定も、nu + 対応する文法系列として合成する。
 const VNEG_BASE={neg:"base",negPast:"past",politeNeg:"polite",politeNegPast:"politePast",desireNeg:"desire",desireNegPast:"desirePast",passiveNeg:"passive",passiveNegPast:"passivePast",
   progNeg:"prog",progNegPast:"pastprog",politeProgNeg:"politeProg",politePastProgNeg:"politePastProg",appearanceNeg:"appearance",
   negTe:"te",negDe:"negativeDe",negHypothetical:"hypothetical",negRequest:"request",negWishRequest:"wishRequest",
@@ -57801,12 +57801,12 @@ function verbForms(e){
 function verbToken(e,form){
   const positive=VNEG_BASE[form], neg=positive!==undefined, actual=neg?positive:form;
   const token=morphToken(e.root+POS.verb,VFORM12[actual]||[]);
-  return neg?"un "+token:token;
+  return neg?"nu "+token:token;
 }
 function adjToken(e,form){
   const positive=ANEG_BASE[form], neg=positive!==undefined, actual=neg?positive:form;
   const token=morphToken(e.root+POS.adj,AFORM12[actual]||[]);
-  return neg?"un "+token:token;
+  return neg?"nu "+token:token;
 }
 function nounToken(e){
   if(e.pos==="name") return e.root;
@@ -58428,7 +58428,7 @@ function setStatus(msg,isError=false){
   const el=$("#appStatus"); if(!el)return;
   el.textContent=msg; el.classList.toggle("error",!!isError);
 }
-const SANA_BUILD_VERSION="1.4.0-alpha.9";
+const SANA_BUILD_VERSION="1.4.0-alpha.10";
 let LAST_SANA_TEXT="", LAST_REVERSE_TEXT="", LAST_IMAGE_SANA="", LAST_IMAGE_JAPANESE="";
 function visibleOutputText(selector, emptyTexts=[]){
   const el=$(selector);
@@ -58472,9 +58472,9 @@ function runTranslate(){
       $("#trAlign").innerHTML=shown.map(c=>`<div class="chip ${c.t==='p'?'p':c.t==='n'?'n':''}"><span class="j">${esc(c.j)}</span><span class="s">${esc(c.s)}</span></div>`).join("")+
         (aligned.length>shown.length?`<div class="safe-note">対応表は安全のため先頭${shown.length}語まで表示しています（全${aligned.length}語）。SANA本文は省略していません。</div>`:"");
       const jpxCount=chunks.filter(c=>String(c.s).startsWith("jpx-")).length;
-      const negCount=chunks.reduce((n,c)=>n+String(c.s).split(/\s+/).filter(x=>x==="un").length,0);
+      const negCount=chunks.reduce((n,c)=>n+String(c.s).split(/\s+/).filter(x=>x==="nu").length,0);
       setDownloadEnabled(!!LAST_SANA_TEXT);
-      setStatus(`変換完了 — ${chunks.length.toLocaleString()}要素 / jpx- ${jpxCount}件 / 否定 un ${negCount}件 / v1.2文法`);
+      setStatus(`変換完了 — ${chunks.length.toLocaleString()}要素 / jpx- ${jpxCount}件 / 否定 nu ${negCount}件 / v1.2文法`);
     }catch(err){LAST_SANA_TEXT="";setDownloadEnabled(false);console.error(err);setStatus("変換中にエラーが起きました: "+(err&&err.message?err.message:String(err)),true);}
     finally{btn.disabled=false;}
   },0);
@@ -58862,9 +58862,9 @@ function getOcrTokenLexicon(){
 
   // 旧画像の読取互換だけは低順位候補として残す。
   const legacySuffixes=["","ta","nai","teiru","teita","teite","tete","teru","kateru","katekudasai","tara","tari","ro","de","i","tai","takatta","takunai","takunakatta","tekudasai","tehoshii","masu","mashita","masen","teimasu","teimashita","teiku","rareru","rareta","rarenai","rarede","rarei","rareteiru","rareteite","raremasu","rareteiku"];
-  const legacyCandidates=["un","ga","mu","no","la","le","na","te","mo","wa","ya","adna","ka","kara","made","yori","shika","sae",
+  const legacyCandidates=["nu","un","ga","mu","no","la","le","na","te","mo","wa","ya","adna","ka","kara","made","yori","shika","sae",
     "cora","cora-veta","cora-veta-vaka","cora-voro","core","core-veni","core-veka","core-vami","core-veta","core-veta-vaka","core-vasa-veta","core-vasa-veta-vaka","cori","cori-veta","cori-veta-vaka","cori-voro","cori-vato",
-    "hesa","hema","hemi","hono","hongo","heyo","hezo","hene","henu","fesi","fera-vasa","fera-vasa-veta","fera-vasa-un","fera-vasa-veta-un","fera-vasa-veni","fera-vasa-ka",
+    "hesa","hema","hemi","hono","hongo","heyo","hezo","hene","henu","fesi","fera-vasa","fera-vasa-veta","fera-vasa-nu","fera-vasa-veta-nu","fera-vasa-un","fera-vasa-veta-un","fera-vasa-veni","fera-vasa-ka",
     "famu","famu-vasa","famu-veta","fona","faro","fane","fene","faka","fimo","fari","fote","fiu","faku","foni","faki","feno","fami","fedo","fita","fako","fagara","fomonaru","fehe",
     "des","dearu","da","datta","dattara","deshita","deshitara","deatta","deattara","dearimashita","dearimashitara","n","ne","yo","shi","san","sama","honomero","darou","nandarou","nandesu","deshou","desho","rashiku","toshite","kedo","kitari","kitakana","kudasai","youni","mitai","kamoshirenai","kamoshiremasen","kamoshirenakatta","hontouni",
     "emdash","hbar","ellipsis","jqopen","jqclose","jdqopen","jdqclose","dqopen","dqclose","sqopen","sqclose","jparenopen","jparenclose","parenopen","parenclose","kono","sono","ano","kore","sore","are","nl","sp","fwsp"];
@@ -59118,7 +59118,7 @@ function reverseTranslate(text){
     cori:"です","cori-veta":"でした","cori-veta-vaka":"でしたら","cori-voro":"でしょう","cori-vato":"でしょ"};
   const CMAP={des:"です",dearu:"である",da:"だ",datta:"だった",dattara:"だったら",deshita:"でした",deshitara:"でしたら",deatta:"であった",deattara:"であったら",dearimashita:"でありました",dearimashitara:"でありましたら"};
   const GMAP12={hesa:"さん",hema:"さま",hemi:"様",hono:"お",hongo:"ご",heyo:"よ",hezo:"ぞ",hene:"ね",henu:"ん",fesi:"し",
-    "fera-vasa":"ございます","fera-vasa-veta":"ございました","fera-vasa-un":"ございません","fera-vasa-veta-un":"ございませんでした","fera-vasa-veni":"ございまして","fera-vasa-ka":"ございますか",
+    "fera-vasa":"ございます","fera-vasa-veta":"ございました","fera-vasa-nu":"ございません","fera-vasa-veta-nu":"ございませんでした","fera-vasa-un":"ございません","fera-vasa-veta-un":"ございませんでした","fera-vasa-veni":"ございまして","fera-vasa-ka":"ございますか",
     famu:"かもしれない","famu-vasa":"かもしれません","famu-veta":"かもしれなかった",fona:"ほんとうに",faro:"なんだろう",fane:"なんです",fene:"ですね",faka:"なかったら",
     faja:"じゃない",heka:"かな",femasen:"ではありません",femashita:"ではありませんでした",
     fawakemashita:"わけではありませんでした",fawakemasen:"わけではありません",fomomashita:"ものではありませんでした",fomomasen:"ものではありません",fomonai:"ものではない",fadakemasen:"だけではありません",fadakenai:"だけではない",
@@ -59174,7 +59174,7 @@ function reverseTranslate(text){
     rareteiru:"passiveProg",rareteite:"passiveProgTe",raremasu:"passivePolite",rareteiku:"passiveTeIku"};
   function isKnownSanaLowerToken(t){
     if(!t) return false;
-    if(t==="un"||t==="nl"||t==="sp"||t==="fwsp") return true;
+    if(t==="nu"||t==="un"||t==="nl"||t==="sp"||t==="fwsp") return true;
     if(DMAP[t]||GMAP12[t]||GMAP[t]||PMAP[t]||CMAP12[t]||CMAP[t]) return true;
     if(parseV12Lexical(t)||parseV12Suru(t)) return true;
     if(t.endsWith(POS.noun)){
@@ -59192,7 +59192,7 @@ function reverseTranslate(text){
     return !!rootMap[t];
   }
   const toks=text.trim().split(/\s+/).filter(Boolean), out=[];
-  let pendingUn=false;
+  let pendingNeg=false;
   for(let raw of toks){
     let punct="";
     // 小数・循環表記のドットは句点ではない。末尾に追加された一個だけを文末として扱う。
@@ -59211,7 +59211,8 @@ function reverseTranslate(text){
     const t=raw.toLowerCase();
     const titleCaseSana=/^[A-Z][a-z0-9]*(?:-[a-z0-9]+)*$/.test(raw) && raw.length>=4 && isKnownSanaLowerToken(t);
     let ja=null, role="n", meta=null;
-    if(raw==="un"){ pendingUn=true; continue; } // v1.4 alpha9: 大文字ASCII "UN" パススルーを飲み込まないよう原文一致で判定
+    if(raw==="nu"){ pendingNeg=true; continue; } // v1.4 alpha10: 現行の独立否定標識
+    if(raw==="un"){ pendingNeg=true; continue; } // alpha.9以前のSANA文を復号する後方互換
     if(!t){}
     else if(/^lit-(?:[0-9a-f]{2})+$/i.test(raw)){ ja=asciiLiteralDecode(raw); role="w"; }
     else if(/[A-Z]/.test(raw) && !titleCaseSana){ ja=raw; role="w"; }
@@ -59281,15 +59282,15 @@ function reverseTranslate(text){
       // 未知の純ASCII/数字は原文をそのまま保持する。SANA既知トークンは上で既に復元済み。
       if(!done){ ja=raw; role="w"; }
     }
-    if(pendingUn){
+    if(pendingNeg){
       const negated=applyUnNegation(meta,ja);
       if(negated!==null) ja=negated;
-      else ja="un "+(ja||raw); // 手書き入力など、否定対象が文法的に解釈できない場合も情報を失わない。
-      pendingUn=false;
+      else ja="nu "+(ja||raw); // 手書き入力など、否定対象が文法的に解釈できない場合も情報を失わない。
+      pendingNeg=false;
     }
     out.push({s:raw,j:(ja||raw)+punct,role});
   }
-  if(pendingUn) out.push({s:"un",j:"un",role:"p"});
+  if(pendingNeg) out.push({s:"nu",j:"nu",role:"p"});
   return out;
 }
 
