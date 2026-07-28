@@ -59462,7 +59462,7 @@ try{
     if (reloadForUpdate) location.reload();
   });
 
-  navigator.serviceWorker.register("./sw.js?v=1.4.0-alpha.10", { scope: "./", updateViaCache: "none" }).then(reg => {
+  navigator.serviceWorker.register("./sw.js?v=1.4.0-alpha.10-r2", { scope: "./", updateViaCache: "none" }).then(reg => {
     registration = reg;
     if (reg.waiting) showUpdate(reg.waiting);
 

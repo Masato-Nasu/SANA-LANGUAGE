@@ -1,4 +1,4 @@
-const CACHE_NAME = "sana-language-v1.4.0-alpha.10";
+const CACHE_NAME = "sana-language-v1.4.0-alpha.10-r2";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -40,7 +40,7 @@ self.addEventListener("fetch", event => {
 
   if (event.request.mode === "navigate") {
     event.respondWith(
-      fetch(event.request)
+      fetch(event.request, { cache: "no-store" })
         .then(response => {
           if (response && response.ok) {
             const copy = response.clone();

@@ -1,3 +1,6 @@
+/*
+  Cache-Control: no-cache
+
 /index.html
   Cache-Control: no-cache, no-store, must-revalidate
 
@@ -5,4 +8,7 @@
   Cache-Control: no-cache, no-store, must-revalidate
 
 /manifest.webmanifest
-  Cache-Control: no-cache
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/version.txt
+  Cache-Control: no-cache, no-store, must-revalidate
